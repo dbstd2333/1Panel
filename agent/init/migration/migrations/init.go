@@ -1895,3 +1895,16 @@ var AddQuickDirectory = &gormigrate.Migration{
 		return tx.AutoMigrate(&model.QuickDirectory{})
 	},
 }
+
+var AddWebsiteGuard = &gormigrate.Migration{
+	ID: "20261023-add-website-guard",
+	Migrate: func(tx *gorm.DB) error {
+		if err := tx.AutoMigrate(&model.WebsiteGuard{}); err != nil {
+			return err
+		}
+		if err := tx.Where("key = ?", "GuardConfig").FirstOrCreate(&model.Setting{Key: "GuardConfig", Value: ""}).Error; err != nil {
+			return err
+		}
+		return global.WebsiteMonitorDB.AutoMigrate(&model.WebsiteMonitorMinute{}, &model.WebsiteMonitorDay{}, &model.WebsiteMonitorSlow{}, &model.WebsiteGuardEvent{})
+	},
+}

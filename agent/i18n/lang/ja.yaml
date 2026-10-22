@@ -126,6 +126,8 @@ ErrFileNotFound: '{{ .name }} ファイルが存在しません'
 ErrFileParseApp: '{{ .name }} ファイルの解析に失敗しました {{ .err }}'
 ErrAppDirNull: 'バージョン フォルダーが存在しません'
 LocalAppErr: 'アプリケーション {{ .name }} の同期に失敗しました {{ .err }}'
+ErrPgBouncerPort: "PgBouncer port is required when PgBouncer is enabled"
+ErrAppTuning: "Auto tuning of {{ .name }} failed, running with default config: {{ .err }}"
 ErrContainerName: 'コンテナ名が既に存在します'
 ErrContainerNotFound: '{{ .name }} コンテナが存在しません'
 ErrContainerMsg: '{{ .name }} コンテナが異常です。詳細についてはコンテナページのログを確認してください。'
@@ -221,6 +223,19 @@ ErrParentWebsite: 'まずサブサイト {{ .name }} を削除する必要があ
 ErrBuildDirNotFound: 'ビルド ディレクトリが存在しません'
 ErrBrotliDisabled: 'brotli モジュールが有効になっていません。先に有効化してビルドしてください'
 ErrBrotliUnsupported: 'パネルは brotli 設定を nginx.conf に自動で組み込めませんでした。ファイルを確認するか OpenResty をアップグレードしてください'
+ErrGuardSafelineSubnet: "No free subnet for SafeLine; remove conflicting Docker networks"
+ErrGuardSafelineExists: "Existing SafeLine containers (safeline-*) were found; uninstall that SafeLine first"
+ErrGuardSafelineNotInstalled: "SafeLine is not installed"
+ErrGuardSafelineUnhealthy: "SafeLine management service did not become healthy; check the safeline-mgt container logs"
+GuardWaitSafeline: "Waiting for the SafeLine management service..."
+ErrGuardInvalidIP: "Invalid IP or CIDR: {{ .name }}"
+ErrGuardNoOpenresty: "Please install OpenResty first"
+ErrGuardWafConflict: "The bundled 1Panel WAF is enabled; turn it off before enabling website protection"
+ErrGuardDisabled: "Enable website protection globally first"
+ErrGuardNoHTTPInclude: "Could not load the http.d directory from nginx.conf; check the file or upgrade OpenResty"
+ErrGuardNginxCheck: "Guard config failed nginx -t and was rolled back: {{ .err }}"
+ErrGuardGeoDB: "Failed to read the IP geolocation database: {{ .err }}"
+GuardInstallDetector: "Install SafeLine CE"
 ErrModuleBuildUnsupported: 'この OpenResty バージョンではモジュールをビルドできません。先にアップグレードしてください'
 ErrImageNotExist: 'オペレーティング環境 {{ .name }} イメージが存在しません。オペレーティング環境を再編集してください'
 ErrProxyIsUsed: 'ロードバランシングはリバースプロキシによって使用されているため、削除できません'

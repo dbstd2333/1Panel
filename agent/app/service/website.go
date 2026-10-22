@@ -797,6 +797,8 @@ func (w WebsiteService) DeleteWebsite(req request.WebsiteDelete) error {
 		if err = delWafConfig(website, req.ForceDelete); err != nil {
 			return err
 		}
+		_ = global.DB.Where("website_id = ?", website.ID).Delete(&model.WebsiteGuard{}).Error
+		deleteWebsiteMonitorData(website.Alias)
 	}
 
 	if checkIsLinkApp(website) && req.DeleteApp {

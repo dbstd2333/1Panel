@@ -126,6 +126,8 @@ ErrFileNotFound: 'El archivo {{ .name }} no existe'
 ErrFileParseApp: 'El archivo {{ .name }} falló al analizarse {{ .err }}'
 ErrAppDirNull: 'La carpeta de la versión no existe'
 LocalAppErr: 'La sincronización de la aplicación {{ .name }} falló {{ .err }}'
+ErrPgBouncerPort: "PgBouncer port is required when PgBouncer is enabled"
+ErrAppTuning: "Auto tuning of {{ .name }} failed, running with default config: {{ .err }}"
 ErrContainerName: 'El nombre del contenedor ya existe'
 ErrContainerNotFound: 'El contenedor {{ .name }} no existe'
 ErrContainerMsg: 'El contenedor {{ .name }} presenta anomalías. Revise el log en la página de contenedores para más detalles'
@@ -221,6 +223,19 @@ ErrParentWebsite: 'Primero debe eliminar el sub-sitio {{ .name }}'
 ErrBuildDirNotFound: 'El directorio de compilación no existe'
 ErrBrotliDisabled: 'El módulo brotli no está habilitado, actívelo y compílelo primero'
 ErrBrotliUnsupported: 'El panel no pudo conectar automáticamente la configuración brotli a nginx.conf; revise el archivo o actualice OpenResty'
+ErrGuardSafelineSubnet: "No free subnet for SafeLine; remove conflicting Docker networks"
+ErrGuardSafelineExists: "Existing SafeLine containers (safeline-*) were found; uninstall that SafeLine first"
+ErrGuardSafelineNotInstalled: "SafeLine is not installed"
+ErrGuardSafelineUnhealthy: "SafeLine management service did not become healthy; check the safeline-mgt container logs"
+GuardWaitSafeline: "Waiting for the SafeLine management service..."
+ErrGuardInvalidIP: "Invalid IP or CIDR: {{ .name }}"
+ErrGuardNoOpenresty: "Please install OpenResty first"
+ErrGuardWafConflict: "The bundled 1Panel WAF is enabled; turn it off before enabling website protection"
+ErrGuardDisabled: "Enable website protection globally first"
+ErrGuardNoHTTPInclude: "Could not load the http.d directory from nginx.conf; check the file or upgrade OpenResty"
+ErrGuardNginxCheck: "Guard config failed nginx -t and was rolled back: {{ .err }}"
+ErrGuardGeoDB: "Failed to read the IP geolocation database: {{ .err }}"
+GuardInstallDetector: "Install SafeLine CE"
 ErrModuleBuildUnsupported: 'Esta versión de OpenResty no puede compilar módulos, actualícela primero'
 ErrImageNotExist: 'La imagen del entorno {{ .name }} no existe, edítela de nuevo'
 ErrProxyIsUsed: 'El balanceo de carga ya está usado por un proxy reverso, no se puede eliminar'

@@ -436,6 +436,13 @@ func (u *PostgresqlService) ChangePassword(req dto.ChangeDBInfo) error {
 	if err := updateInstallInfoInDB(req.Type, req.Database, "password", req.Value); err != nil {
 		return err
 	}
+	if req.From == "local" && req.Type == "postgresql" {
+		if baseInfo, err := appInstallRepo.LoadBaseInfo(req.Type, req.Database); err == nil {
+			if install, err := appInstallRepo.GetFirst(repo.WithByID(baseInfo.ID)); err == nil {
+				refreshPgBouncerAuth(install, req.Value)
+			}
+		}
+	}
 	if req.From == "local" {
 		remote, err := databaseRepo.Get(repo.WithByName(req.Database))
 		if err != nil {

@@ -259,7 +259,10 @@ type redisConfig struct {
 }
 
 func confSet(redisName string, redisType string, updateType string, changeConf []redisConfig) error {
-	path := fmt.Sprintf("%s/%s/%s/conf/redis.conf", global.Dir.AppInstallDir, redisType, redisName)
+	return confSetByPath(fmt.Sprintf("%s/%s/%s/conf/redis.conf", global.Dir.AppInstallDir, redisType, redisName), updateType, changeConf)
+}
+
+func confSetByPath(path string, updateType string, changeConf []redisConfig) error {
 	lineBytes, err := os.ReadFile(path)
 	if err != nil {
 		return err

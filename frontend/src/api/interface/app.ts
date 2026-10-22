@@ -101,6 +101,31 @@ export namespace App {
         formFields: FromField[];
     }
 
+    export interface TuningPreviewReq {
+        key: string;
+        version: string;
+        template: string;
+        pgBouncer: boolean;
+        advanced: boolean;
+        cpuQuota: number;
+        memoryLimit: number;
+        memoryUnit: string;
+    }
+
+    export interface TuningItem {
+        key: string;
+        value: string;
+    }
+
+    export interface TuningPreview {
+        recommend: string;
+        template: string;
+        cpu: number;
+        memMB: number;
+        diskGB: number;
+        items: TuningItem[];
+    }
+
     export interface FromField {
         type: string;
         labelZh: string;

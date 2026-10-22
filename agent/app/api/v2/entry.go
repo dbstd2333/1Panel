@@ -59,6 +59,7 @@ var (
 	backupRecordService = service.NewIBackupRecordService()
 
 	websiteService            = service.NewIWebsiteService()
+	websiteGuardService       = service.NewIWebsiteGuardService()
 	websiteDnsAccountService  = service.NewIWebsiteDnsAccountService()
 	websiteSSLService         = service.NewIWebsiteSSLService()
 	websiteAcmeAccountService = service.NewIWebsiteAcmeAccountService()

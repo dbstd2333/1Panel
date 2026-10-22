@@ -173,6 +173,27 @@ func (b *BaseApi) InstallApp(c *gin.Context) {
 }
 
 // @Tags App
+// @Summary Load install-time tuning preview
+// @Accept json
+// @Param request body request.AppTuningPreview true "request"
+// @Success 200 {object} response.AppTuningPreview
+// @Security ApiKeyAuth
+// @Security Timestamp
+// @Router /apps/install/tuning [post]
+func (b *BaseApi) LoadAppTuningPreview(c *gin.Context) {
+	var req request.AppTuningPreview
+	if err := helper.CheckBindAndValidate(&req, c); err != nil {
+		return
+	}
+	res, err := appService.LoadTuningPreview(req)
+	if err != nil {
+		helper.InternalServer(c, err)
+		return
+	}
+	helper.SuccessWithData(c, res)
+}
+
+// @Tags App
 // @Summary Get app tags
 // @Success 200
 // @Security ApiKeyAuth

@@ -126,6 +126,8 @@ ErrFileNotFound: '{{ .name }} 파일이 존재하지 않습니다'
 ErrFileParseApp: '{{ .name }} 파일 구문 분석에 실패했습니다 {{ .err }}'
 ErrAppDirNull: '버전 폴더가 존재하지 않습니다'
 LocalAppErr: '애플리케이션 {{ .name }} 동기화에 실패했습니다 {{ .err }}'
+ErrPgBouncerPort: "PgBouncer port is required when PgBouncer is enabled"
+ErrAppTuning: "Auto tuning of {{ .name }} failed, running with default config: {{ .err }}"
 ErrContainerName: '컨테이너 이름이 이미 존재합니다'
 ErrContainerNotFound: '{{ .name }} 컨테이너가 존재하지 않습니다'
 ErrContainerMsg: '{{ .name }} 컨테이너가 비정상입니다. 자세한 내용은 컨테이너 페이지의 로그를 확인하세요.'
@@ -221,6 +223,19 @@ ErrParentWebsite: '먼저 하위 사이트 {{ .name }}을 삭제해야 합니다
 ErrBuildDirNotFound: '빌드 디렉토리가 존재하지 않습니다'
 ErrBrotliDisabled: 'brotli 모듈이 활성화되지 않았습니다. 먼저 활성화하고 빌드하세요'
 ErrBrotliUnsupported: '패널이 brotli 설정을 nginx.conf에 자동으로 연결할 수 없습니다. 파일을 확인하거나 OpenResty를 업그레이드하세요'
+ErrGuardSafelineSubnet: "No free subnet for SafeLine; remove conflicting Docker networks"
+ErrGuardSafelineExists: "Existing SafeLine containers (safeline-*) were found; uninstall that SafeLine first"
+ErrGuardSafelineNotInstalled: "SafeLine is not installed"
+ErrGuardSafelineUnhealthy: "SafeLine management service did not become healthy; check the safeline-mgt container logs"
+GuardWaitSafeline: "Waiting for the SafeLine management service..."
+ErrGuardInvalidIP: "Invalid IP or CIDR: {{ .name }}"
+ErrGuardNoOpenresty: "Please install OpenResty first"
+ErrGuardWafConflict: "The bundled 1Panel WAF is enabled; turn it off before enabling website protection"
+ErrGuardDisabled: "Enable website protection globally first"
+ErrGuardNoHTTPInclude: "Could not load the http.d directory from nginx.conf; check the file or upgrade OpenResty"
+ErrGuardNginxCheck: "Guard config failed nginx -t and was rolled back: {{ .err }}"
+ErrGuardGeoDB: "Failed to read the IP geolocation database: {{ .err }}"
+GuardInstallDetector: "Install SafeLine CE"
 ErrModuleBuildUnsupported: '현재 OpenResty 버전은 모듈을 빌드할 수 없습니다. 먼저 업그레이드하세요'
 ErrImageNotExist: '운영 환경 {{ .name }} 이미지가 존재하지 않습니다. 운영 환경을 다시 편집하세요.'
 ErrProxyIsUsed: '로드 밸런싱이 역방향 프록시에 의해 사용되었으므로 삭제할 수 없습니다'

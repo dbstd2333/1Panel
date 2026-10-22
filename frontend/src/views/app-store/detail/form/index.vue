@@ -48,6 +48,18 @@
                 :propStart="'params.'"
             />
 
+            <Tuning
+                :key="'tuning' + paramKey"
+                v-if="showParams && showTuning"
+                :app-key="currentApp.key"
+                :version="formData.version"
+                :params="formData.params"
+                :advanced="formData.advanced"
+                :cpu-quota="formData.cpuQuota"
+                :memory-limit="formData.memoryLimit"
+                :memory-unit="formData.memoryUnit"
+            />
+
             <el-form-item prop="advanced">
                 <el-checkbox v-model="formData.advanced" :label="$t('app.advanced')" size="large" />
             </el-form-item>
@@ -152,6 +164,7 @@ import { Rules, checkNumberRange } from '@/global/form-rules';
 import { FormInstance, FormRules } from 'element-plus';
 import { ref, watch } from 'vue';
 import Params from '../params/index.vue';
+import Tuning from './tuning.vue';
 import { Container } from '@/api/interface/container';
 import CodemirrorPro from '@/components/codemirror-pro/index.vue';
 import { computeSizeFromMB } from '@/utils/size';
@@ -212,6 +225,8 @@ const appVersions = ref<string[]>([]);
 const operateNode = ref();
 const env = ref();
 const masterNodeAddr = ref();
+// Install-time tuning only applies to standalone installs, not cluster roles.
+const showTuning = computed(() => !env.value && ['postgresql', 'redis'].includes(currentApp.value?.key));
 
 const formRules = ref<FormRules>({
     name: [Rules.appName],

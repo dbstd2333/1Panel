@@ -46,6 +46,9 @@
             <el-tab-pane :label="$t('website.redirect')" name="11">
                 <Redirect :id="id" v-if="tabIndex == '11'"></Redirect>
             </el-tab-pane>
+            <el-tab-pane :label="$t('website.guard.tabSite')" name="17">
+                <Guard :id="id" v-if="tabIndex == '17'"></Guard>
+            </el-tab-pane>
 
             <el-tab-pane
                 :label="'PHP'"
@@ -102,6 +105,7 @@ import RealIP from './real-ip/index.vue';
 import Resource from './resource/index.vue';
 import Cors from './cors/index.vue';
 import Stream from './stream/index.vue';
+import Guard from '@/views/website/guard/site/index.vue';
 defineOptions({ name: 'Basic' });
 
 const props = defineProps({

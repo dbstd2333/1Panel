@@ -44,6 +44,16 @@ const webSiteRouter = {
             },
         },
         {
+            path: '/websites/guard',
+            name: 'WebsiteGuard',
+            component: () => import('@/views/website/guard/index.vue'),
+            meta: {
+                icon: 'p-website',
+                title: 'menu.websiteGuard',
+                permission: 'website_view',
+            },
+        },
+        {
             path: '/websites/templates',
             name: 'WebsiteTemplate',
             component: () => import('@/views/website/template/index.vue'),

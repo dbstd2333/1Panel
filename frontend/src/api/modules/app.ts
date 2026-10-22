@@ -37,6 +37,10 @@ export const installApp = (install: App.AppInstall) => {
     return http.post<any>('apps/install', install);
 };
 
+export const loadAppTuningPreview = (req: App.TuningPreviewReq) => {
+    return http.post<App.TuningPreview>('apps/install/tuning', req);
+};
+
 export const changePort = (params: App.ChangePort) => {
     return http.post<any>('apps/installed/port/change', params);
 };

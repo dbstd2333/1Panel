@@ -111,6 +111,8 @@ ErrFileNotFound: 'ບໍ່ມີໄຟລ໌ {{ .name }} ຢູ່'
 ErrFileParseApp: 'ວິເຄາະ {{ .name }} ລົ້ມເຫຼວ: {{ .err }}'
 ErrAppDirNull: 'ບໍ່ມີໂຟນເດີເວີຊັນຢູ່'
 LocalAppErr: 'ຊິງຄ໌ແອັບ {{ .name }} ລົ້ມເຫຼວ: {{ .err }}'
+ErrPgBouncerPort: "PgBouncer port is required when PgBouncer is enabled"
+ErrAppTuning: "Auto tuning of {{ .name }} failed, running with default config: {{ .err }}"
 ErrContainerName: 'ຊື່ຄອນເທນເນີມີຢູ່ໃນລະບົບແລ້ວ'
 ErrCreateHttpClient: 'ສ້າງຄຳຮ້ອງຂໍ HTTP ລົ້ມເຫຼວ: {{ .err }}'
 ErrHttpReqTimeOut: 'ຄຳຮ້ອງຂໍ HTTP ເກີນກຳນົດເວລາ: {{ .err }}'
@@ -211,6 +213,19 @@ ErrParentWebsite: 'ກະລຸນາລຶບເວັບໄຊຍ່ອຍ {{ 
 ErrBuildDirNotFound: 'ບໍ່ມີໂຟນເດີ Build ຢູ່'
 ErrBrotliDisabled: 'ໂມດູນ brotli ຍັງບໍ່ໄດ້ເປີດໃຊ້, ກະລຸນາເປີດໃຊ້ ແລະ ສ້າງກ່ອນ'
 ErrBrotliUnsupported: 'ແຜງຄວບຄຸມບໍ່ສາມາດເຊື່ອມການຕັ້ງຄ່າ brotli ເຂົ້າ nginx.conf ໂດຍອັດຕະໂນມັດໄດ້; ກວດເບິ່ງໄຟລ໌ ຫຼື ອັບເກຣດ OpenResty'
+ErrGuardSafelineSubnet: "No free subnet for SafeLine; remove conflicting Docker networks"
+ErrGuardSafelineExists: "Existing SafeLine containers (safeline-*) were found; uninstall that SafeLine first"
+ErrGuardSafelineNotInstalled: "SafeLine is not installed"
+ErrGuardSafelineUnhealthy: "SafeLine management service did not become healthy; check the safeline-mgt container logs"
+GuardWaitSafeline: "Waiting for the SafeLine management service..."
+ErrGuardInvalidIP: "Invalid IP or CIDR: {{ .name }}"
+ErrGuardNoOpenresty: "Please install OpenResty first"
+ErrGuardWafConflict: "The bundled 1Panel WAF is enabled; turn it off before enabling website protection"
+ErrGuardDisabled: "Enable website protection globally first"
+ErrGuardNoHTTPInclude: "Could not load the http.d directory from nginx.conf; check the file or upgrade OpenResty"
+ErrGuardNginxCheck: "Guard config failed nginx -t and was rolled back: {{ .err }}"
+ErrGuardGeoDB: "Failed to read the IP geolocation database: {{ .err }}"
+GuardInstallDetector: "Install SafeLine CE"
 ErrModuleBuildUnsupported: 'ລຸ້ນ OpenResty ນີ້ບໍ່ສາມາດສ້າງໂມດູນໄດ້, ກະລຸນາອັບເກຣດກ່ອນ'
 ErrImageNotExist: 'ບໍ່ພົບຮູບພາບ runtime: {{ .name }}'
 ErrProxyIsUsed: 'ຕົວຈັດການການໂຫຼດ (Load balancer) ຖືກໃຊ້ງານໂດຍ reverse proxy'

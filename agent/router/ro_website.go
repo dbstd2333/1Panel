@@ -28,6 +28,20 @@ func (a *WebsiteRouter) InitRouter(Router *gin.RouterGroup) {
 		websiteRouter.POST("/group/change", baseApi.ChangeWebsiteGroup)
 
 		websiteRouter.POST("/batch/operate", baseApi.BatchOpWebsites)
+
+		websiteRouter.GET("/guard/status", baseApi.GetGuardStatus)
+		websiteRouter.POST("/guard/global", baseApi.UpdateGuardGlobal)
+		websiteRouter.POST("/guard/detector", baseApi.OperateGuardDetector)
+		websiteRouter.GET("/guard/site/:id", baseApi.GetGuardSite)
+		websiteRouter.POST("/guard/site", baseApi.UpdateGuardSite)
+		websiteRouter.POST("/guard/events", baseApi.SearchGuardEvents)
+		websiteRouter.POST("/guard/events/stats", baseApi.LoadGuardEventStats)
+		websiteRouter.GET("/guard/countries", baseApi.LoadGuardCountries)
+		websiteRouter.POST("/monitor/overview", baseApi.LoadWebsiteMonitorOverview)
+		websiteRouter.POST("/monitor/trend", baseApi.LoadWebsiteMonitorTrend)
+		websiteRouter.POST("/monitor/top", baseApi.LoadWebsiteMonitorTop)
+		websiteRouter.POST("/monitor/slow", baseApi.SearchWebsiteMonitorSlow)
+
 		websiteRouter.POST("/batch/group", baseApi.BatchSetWebsiteGroup)
 		websiteRouter.POST("/batch/ssl", baseApi.BatchSetHttps)
 

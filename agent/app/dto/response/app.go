@@ -188,3 +188,17 @@ type AppConfig struct {
 	RawCompose string     `json:"rawCompose"`
 	request.AppContainerConfig
 }
+
+type AppTuningItem struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}
+
+type AppTuningPreview struct {
+	Recommend string          `json:"recommend"`
+	Template  string          `json:"template"`
+	CPU       int             `json:"cpu"`
+	MemMB     int             `json:"memMB"`
+	DiskGB    int             `json:"diskGB"`
+	Items     []AppTuningItem `json:"items"`
+}

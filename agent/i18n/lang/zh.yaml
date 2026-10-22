@@ -126,6 +126,8 @@ ErrFileNotFound: '{{ .name }} 文件不存在'
 ErrFileParseApp: '{{ .name }} 文件解析失败 {{ .err }}'
 ErrAppDirNull: '版本文件夹不存在'
 LocalAppErr: "应用 {{ .name }} 同步失败！{{ .err }}"
+ErrPgBouncerPort: "启用 PgBouncer 时必须填写 PgBouncer 端口"
+ErrAppTuning: "应用 {{ .name }} 自动调优失败，已使用默认配置运行：{{ .err }}"
 ErrContainerName: "容器名称已存在"
 ErrContainerNotFound: '{{ .name }} 容器不存在'
 ErrContainerMsg: '{{ .name }} 容器异常，具体请在容器页面查看日志'
@@ -221,6 +223,19 @@ ErrParentWebsite: "需要先删除子网站 {{ .name }}"
 ErrBuildDirNotFound: "构建目录不存在"
 ErrBrotliDisabled: "brotli 模块未启用，请先启用并构建"
 ErrBrotliUnsupported: "面板无法自动将 brotli 配置写入 nginx.conf，请检查配置文件或升级 OpenResty"
+ErrGuardSafelineSubnet: "没有可用的网段部署 SafeLine，请清理冲突的 Docker 网络"
+ErrGuardSafelineExists: "检测到已有 SafeLine 容器（safeline-*），请先卸载已有的 SafeLine"
+ErrGuardSafelineNotInstalled: "SafeLine 尚未安装"
+ErrGuardSafelineUnhealthy: "SafeLine 管理服务启动超时，请查看 safeline-mgt 容器日志"
+GuardWaitSafeline: "等待 SafeLine 管理服务就绪..."
+ErrGuardInvalidIP: "IP 或网段格式错误：{{ .name }}"
+ErrGuardNoOpenresty: "请先安装 OpenResty"
+ErrGuardWafConflict: "OpenResty 自带的 1Panel WAF 已开启，请先关闭后再启用网站防护"
+ErrGuardDisabled: "请先在网站防护页面开启全局防护"
+ErrGuardNoHTTPInclude: "无法在 nginx.conf 中加载 http.d 配置目录，请检查配置文件或升级 OpenResty"
+ErrGuardNginxCheck: "防护配置校验失败，已回滚：{{ .err }}"
+ErrGuardGeoDB: "读取 IP 地理位置库失败：{{ .err }}"
+GuardInstallDetector: "安装 SafeLine 社区版"
 ErrModuleBuildUnsupported: "当前 OpenResty 版本无法构建模块，请先升级"
 ErrImageNotExist: "运行环境 {{ .name }} 镜像不存在，请重新编辑运行环境"
 ErrProxyIsUsed: "负载均衡已被反向代理使用，无法删除"

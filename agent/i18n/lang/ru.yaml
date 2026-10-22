@@ -126,6 +126,8 @@ ErrFileNotFound: 'Файл {{ .name }} не существует'
 ErrFileParseApp: '{{ .name }} анализ файла не удался {{ .err }}'
 ErrAppDirNull: 'Папка версии не существует'
 LocalAppErr: 'Синхронизация приложения {{ .name }} не удалась {{ .err }}'
+ErrPgBouncerPort: "PgBouncer port is required when PgBouncer is enabled"
+ErrAppTuning: "Auto tuning of {{ .name }} failed, running with default config: {{ .err }}"
 ErrContainerName: 'Имя контейнера уже существует'
 ErrContainerNotFound: 'Контейнер {{ .name }} не существует'
 ErrContainerMsg: 'Контейнер {{ .name }} ненормален. Подробности смотрите в журнале на странице контейнера.'
@@ -221,6 +223,19 @@ ErrParentWebsite: 'Сначала вам необходимо удалить д�
 ErrBuildDirNotFound: 'Каталог сборки не существует'
 ErrBrotliDisabled: 'Модуль brotli не включён, сначала включите и соберите его'
 ErrBrotliUnsupported: 'Панель не смогла автоматически подключить настройки brotli к nginx.conf; проверьте файл или обновите OpenResty'
+ErrGuardSafelineSubnet: "No free subnet for SafeLine; remove conflicting Docker networks"
+ErrGuardSafelineExists: "Existing SafeLine containers (safeline-*) were found; uninstall that SafeLine first"
+ErrGuardSafelineNotInstalled: "SafeLine is not installed"
+ErrGuardSafelineUnhealthy: "SafeLine management service did not become healthy; check the safeline-mgt container logs"
+GuardWaitSafeline: "Waiting for the SafeLine management service..."
+ErrGuardInvalidIP: "Invalid IP or CIDR: {{ .name }}"
+ErrGuardNoOpenresty: "Please install OpenResty first"
+ErrGuardWafConflict: "The bundled 1Panel WAF is enabled; turn it off before enabling website protection"
+ErrGuardDisabled: "Enable website protection globally first"
+ErrGuardNoHTTPInclude: "Could not load the http.d directory from nginx.conf; check the file or upgrade OpenResty"
+ErrGuardNginxCheck: "Guard config failed nginx -t and was rolled back: {{ .err }}"
+ErrGuardGeoDB: "Failed to read the IP geolocation database: {{ .err }}"
+GuardInstallDetector: "Install SafeLine CE"
 ErrModuleBuildUnsupported: 'Эта версия OpenResty не может собирать модули, сначала обновите её'
 ErrImageNotExist: 'Образ операционной среды {{ .name }} не существует, пожалуйста, отредактируйте операционную среду заново'
 ErrProxyIsUsed: 'Балансировка нагрузки используется обратным прокси, невозможно удалить'

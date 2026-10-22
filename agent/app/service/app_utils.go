@@ -756,6 +756,13 @@ func getUpgradeCompose(install model.AppInstall, detail model.AppDetail) (string
 		envs[constant.ContainerName] = install.ContainerName
 	}
 	config.Advanced = true
+	if pgBouncerEnabled(install.App.Key, envs) {
+		if services, ok := composeMap["services"].(map[string]interface{}); ok {
+			if _, exist := services[pgBouncerServiceName]; !exist {
+				injectPgBouncerService(services, install.ServiceName)
+			}
+		}
+	}
 	if err := addDockerComposeCommonParam(composeMap, install.ServiceName, config, envs); err != nil {
 		return "", err
 	}

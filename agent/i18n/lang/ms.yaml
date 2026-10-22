@@ -126,6 +126,8 @@ ErrFileNotFound: 'Fail {{ .name }} tidak wujud'
 ErrFileParseApp: '{{ .name }} penghuraian fail gagal {{ .err }}'
 ErrAppDirNull: 'Folder versi tidak wujud'
 LocalAppErr: 'Penyegerakan {{ .name }} aplikasi gagal {{ .err }}'
+ErrPgBouncerPort: "PgBouncer port is required when PgBouncer is enabled"
+ErrAppTuning: "Auto tuning of {{ .name }} failed, running with default config: {{ .err }}"
 ErrContainerName: 'Nama kontena sudah wujud'
 ErrContainerNotFound: 'Bekas {{ .name }} tidak wujud'
 ErrContainerMsg: 'Bekas ''{{ .name }} adalah tidak normal. Sila semak log pada halaman kontena untuk butiran'''
@@ -221,6 +223,19 @@ ErrParentWebsite: 'Anda perlu memadamkan subtapak {{ .name }} dahulu'
 ErrBuildDirNotFound: 'Direktori binaan tidak wujud'
 ErrBrotliDisabled: 'Modul brotli tidak diaktifkan, aktifkan dan bina dahulu'
 ErrBrotliUnsupported: 'Panel tidak dapat menyambungkan tetapan brotli ke nginx.conf secara automatik; semak fail atau naik taraf OpenResty'
+ErrGuardSafelineSubnet: "No free subnet for SafeLine; remove conflicting Docker networks"
+ErrGuardSafelineExists: "Existing SafeLine containers (safeline-*) were found; uninstall that SafeLine first"
+ErrGuardSafelineNotInstalled: "SafeLine is not installed"
+ErrGuardSafelineUnhealthy: "SafeLine management service did not become healthy; check the safeline-mgt container logs"
+GuardWaitSafeline: "Waiting for the SafeLine management service..."
+ErrGuardInvalidIP: "Invalid IP or CIDR: {{ .name }}"
+ErrGuardNoOpenresty: "Please install OpenResty first"
+ErrGuardWafConflict: "The bundled 1Panel WAF is enabled; turn it off before enabling website protection"
+ErrGuardDisabled: "Enable website protection globally first"
+ErrGuardNoHTTPInclude: "Could not load the http.d directory from nginx.conf; check the file or upgrade OpenResty"
+ErrGuardNginxCheck: "Guard config failed nginx -t and was rolled back: {{ .err }}"
+ErrGuardGeoDB: "Failed to read the IP geolocation database: {{ .err }}"
+GuardInstallDetector: "Install SafeLine CE"
 ErrModuleBuildUnsupported: 'Versi OpenResty ini tidak boleh membina modul, naik taraf dahulu'
 ErrImageNotExist: 'Imej persekitaran operasi {{ .name }} tidak wujud, sila edit semula persekitaran pengendalian'
 ErrProxyIsUsed: 'Pengimbang beban telah digunakan oleh pengganti terbalik, tidak boleh dipadamkan'

@@ -1392,3 +1392,18 @@ var UpdateFirewallMenuPath = &gormigrate.Migration{
 		})
 	},
 }
+
+var AddWebsiteGuardMenu = &gormigrate.Migration{
+	ID: "20261023-add-website-guard-menu",
+	Migrate: func(tx *gorm.DB) error {
+		return helper.UpsertChildMenuByLabel(tx, "Website-Menu", dto.ShowMenu{
+			ID:       "35",
+			Disabled: false,
+			Title:    "menu.websiteGuard",
+			IsShow:   true,
+			Label:    "WebsiteGuard",
+			Path:     "/websites/guard",
+			Sort:     220,
+		}, "SSL")
+	},
+}

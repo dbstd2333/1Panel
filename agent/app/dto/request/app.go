@@ -27,6 +27,15 @@ type AppInstallCreate struct {
 	NodePushConfig
 }
 
+type AppTuningPreview struct {
+	Key       string `json:"key" validate:"required,oneof=postgresql redis"`
+	Version   string `json:"version"`
+	Template  string `json:"template"`
+	PgBouncer bool   `json:"pgBouncer"`
+
+	AppContainerConfig
+}
+
 type NodePushConfig struct {
 	Nodes    []string `json:"nodes"`
 	PushNode bool     `json:"pushNode"`

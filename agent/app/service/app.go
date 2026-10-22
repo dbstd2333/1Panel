@@ -56,6 +56,7 @@ type IAppService interface {
 	SyncAppListFromLocal(taskID string)
 	GetAppIcon(key string) ([]byte, string, string, error)
 	GetAppDetailByKey(appKey, version string) (response.AppDetailSimpleDTO, error)
+	LoadTuningPreview(req request.AppTuningPreview) (*response.AppTuningPreview, error)
 }
 
 type appInstallHooks struct {
@@ -516,6 +517,15 @@ func (a AppService) installWithHooks(req request.AppInstallCreate, executeScript
 	}
 	appInstall.ServiceName = serviceName
 
+	normalizeTuningParams(app.Key, req.Params)
+	if pgBouncerEnabled(app.Key, req.Params) {
+		if _, ok := req.Params[PgBouncerPortKey]; !ok {
+			err = buserr.New("ErrPgBouncerPort")
+			return
+		}
+		injectPgBouncerService(servicesMap, serviceName)
+	}
+
 	if !req.SkipComposeCommonConfig {
 		if err = addDockerComposeCommonParam(composeMap, appInstall.ServiceName, req.AppContainerConfig, req.Params); err != nil {
 			return
@@ -592,6 +602,18 @@ func (a AppService) installWithHooks(req request.AppInstallCreate, executeScript
 				return err
 			}
 		}
+		tuneTemplate := paramString(req.Params, TuneTemplateKey)
+		tuningItems := appTuningPreview(app.Key, appDetail.Version, tuneTemplate, loadTuningBasis(req.AppContainerConfig), pgBouncerEnabled(app.Key, req.Params))
+		if app.Key == "redis" {
+			if err = applyRedisTuning(appInstall, tuningItems); err != nil {
+				return err
+			}
+		}
+		if pgBouncerEnabled(app.Key, req.Params) {
+			if err = writePgBouncerConfig(appInstall, req.Params); err != nil {
+				return err
+			}
+		}
 		if executeScript || req.UseLifecycleScripts {
 			if err = runScript(t, appInstall, "init"); err != nil {
 				return err
@@ -607,6 +629,12 @@ func (a AppService) installWithHooks(req request.AppInstallCreate, executeScript
 		}
 		if err = upApp(t, appInstall, req.PullImage, req.UseLifecycleScripts); err != nil {
 			return err
+		}
+		if app.Key == "postgresql" && len(tuningItems) > 0 {
+			// Tuning is best effort: the database is already usable with defaults.
+			if tuneErr := applyPgTuning(t, appInstall, tuningItems); tuneErr != nil {
+				t.Log(i18n.GetWithNameAndErr("ErrAppTuning", appInstall.Name, tuneErr))
+			}
 		}
 		updateToolApp(appInstall)
 		return nil

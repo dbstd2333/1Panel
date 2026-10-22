@@ -1407,3 +1407,18 @@ var AddWebsiteGuardMenu = &gormigrate.Migration{
 		}, "SSL")
 	},
 }
+
+var AddWebsiteMonitorMenu = &gormigrate.Migration{
+	ID: "20261023-add-website-monitor-menu",
+	Migrate: func(tx *gorm.DB) error {
+		return helper.UpsertChildMenuByLabel(tx, "Website-Menu", dto.ShowMenu{
+			ID:       "36",
+			Disabled: false,
+			Title:    "menu.websiteMonitor",
+			IsShow:   true,
+			Label:    "WebsiteMonitor",
+			Path:     "/websites/monitor",
+			Sort:     230,
+		}, "WebsiteGuard")
+	},
+}

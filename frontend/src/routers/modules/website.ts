@@ -54,6 +54,16 @@ const webSiteRouter = {
             },
         },
         {
+            path: '/websites/monitor',
+            name: 'WebsiteMonitor',
+            component: () => import('@/views/website/monitor/index.vue'),
+            meta: {
+                icon: 'p-website',
+                title: 'menu.websiteMonitor',
+                permission: 'website_view',
+            },
+        },
+        {
             path: '/websites/templates',
             name: 'WebsiteTemplate',
             component: () => import('@/views/website/template/index.vue'),

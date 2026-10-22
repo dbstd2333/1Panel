@@ -3,7 +3,12 @@
         <div class="flex flex-wrap items-center gap-3 mb-4">
             <el-select v-model="site" class="p-w-200" @change="search">
                 <el-option :label="$t('website.guard.allSites')" value="" />
-                <el-option v-for="item in sites" :key="item.alias" :label="item.primaryDomain" :value="item.alias" />
+                <el-option
+                    v-for="item in enabledSites"
+                    :key="item.alias"
+                    :label="item.primaryDomain"
+                    :value="item.alias"
+                />
             </el-select>
             <el-radio-group v-model="range" @change="search">
                 <el-radio-button value="1h">{{ $t('website.guard.range1h') }}</el-radio-button>
@@ -12,9 +17,31 @@
                 <el-radio-button value="30d">{{ $t('website.guard.range30d') }}</el-radio-button>
             </el-radio-group>
             <el-button :icon="Refresh" circle @click="search" />
-            <span class="input-help !mt-0">{{ $t('website.guard.monitorHelper') }}</span>
+            <el-checkbox v-model="autoRefresh" @change="onAutoRefresh">
+                {{ $t('website.guard.autoRefresh') }}
+            </el-checkbox>
+            <el-button type="primary" plain @click="openEnable()">{{ $t('website.guard.monitorManage') }}</el-button>
         </div>
+        <div class="input-help !mt-0 mb-3">{{ $t('website.guard.monitorHelper') }}</div>
 
+        <el-alert
+            v-if="pendingSite"
+            type="warning"
+            show-icon
+            :closable="false"
+            class="mb-3"
+            :title="$t('website.guard.monitorSiteOff', [pendingSite.primaryDomain])"
+        >
+            <el-button type="primary" link @click="openEnable(pendingSite.websiteId)">
+                {{ $t('website.guard.monitorEnable') }}
+            </el-button>
+        </el-alert>
+
+        <el-empty v-if="statusLoaded && enabledSites.length === 0" :description="$t('website.guard.monitorEmpty')">
+            <el-button type="primary" @click="openEnable()">{{ $t('website.guard.monitorEnable') }}</el-button>
+        </el-empty>
+
+        <template v-else>
         <el-row :gutter="12" class="mb-2">
             <el-col v-for="card in cards" :key="card.label" :xs="12" :sm="8" :md="6" :lg="4" class="mb-3">
                 <el-card shadow="never" class="stat-card">
@@ -84,6 +111,26 @@
                 </el-table-column>
             </ComplexTable>
         </el-card>
+        </template>
+
+        <DialogPro v-model="enableOpen" :title="$t('website.guard.monitorEnable')" size="small">
+            <el-alert type="info" :closable="false" class="mb-3" :title="$t('website.guard.monitorEnableHelper')" />
+            <el-checkbox-group v-model="enableIds" class="flex flex-col">
+                <el-checkbox v-for="item in sites" :key="item.websiteId" :value="item.websiteId" :disabled="item.enable">
+                    {{ item.primaryDomain }}
+                    <span v-if="item.enable" class="input-help !mt-0 ml-1">
+                        {{ item.mode === 'off' ? $t('website.guard.monitorOnly') : $t('website.guard.guarded') }}
+                    </span>
+                </el-checkbox>
+            </el-checkbox-group>
+            <span v-if="sites.length === 0" class="input-help">{{ $t('website.guard.noWebsite') }}</span>
+            <template #footer>
+                <el-button @click="enableOpen = false">{{ $t('commons.button.cancel') }}</el-button>
+                <el-button type="primary" :loading="enabling" :disabled="newIds.length === 0" @click="submitEnable">
+                    {{ $t('commons.button.confirm') }}
+                </el-button>
+            </template>
+        </DialogPro>
     </div>
 </template>
 
@@ -91,8 +138,11 @@
 import { Refresh } from '@element-plus/icons-vue';
 import { WebsiteGuard } from '@/api/interface/website-guard';
 import {
+    getGuardSite,
     getGuardStatus,
     loadGuardCountries,
+    updateGuardGlobal,
+    updateGuardSite,
     loadMonitorOverview,
     loadMonitorTop,
     loadMonitorTrend,
@@ -101,13 +151,27 @@ import {
 import { computeSize } from '@/utils/size';
 import { dateFormat } from '@/utils/date';
 import { useGlobalStore } from '@/composables/useGlobalStore';
+import { MsgSuccess } from '@/utils/message';
 import i18n from '@/lang';
 
 const { globalStore } = useGlobalStore();
+const route = useRoute();
 const loading = ref(false);
-const site = ref('');
+const site = ref(String(route.query.site || ''));
 const range = ref('24h');
-const sites = ref<WebsiteGuard.SiteBrief[]>([]);
+const status = ref<WebsiteGuard.Status>();
+const statusLoaded = ref(false);
+const sites = computed(() => status.value?.sites || []);
+const enabledSites = computed(() => sites.value.filter((s) => s.enable));
+const pendingSite = ref<WebsiteGuard.SiteBrief>();
+const autoRefresh = ref(false);
+let refreshTimer: ReturnType<typeof setInterval> | undefined;
+const enableOpen = ref(false);
+const enabling = ref(false);
+const enableIds = ref<number[]>([]);
+const newIds = computed(() =>
+    enableIds.value.filter((id) => !sites.value.find((s) => s.websiteId === id)?.enable),
+);
 const overview = ref<WebsiteGuard.MonitorOverview>();
 const top = ref<Partial<WebsiteGuard.MonitorTop>>({});
 const slow = ref<WebsiteGuard.Slow[]>([]);
@@ -254,9 +318,72 @@ const search = async () => {
     }
 };
 
+const loadStatus = async () => {
+    const res = await getGuardStatus();
+    status.value = res.data;
+    statusLoaded.value = true;
+    pendingSite.value = undefined;
+    if (site.value && !enabledSites.value.find((s) => s.alias === site.value)) {
+        pendingSite.value = sites.value.find((s) => s.alias === site.value);
+        site.value = '';
+    }
+};
+
+const openEnable = (id?: number) => {
+    enableIds.value = enabledSites.value.map((s) => s.websiteId);
+    if (id) {
+        enableIds.value.push(id);
+    }
+    enableOpen.value = true;
+};
+
+// Monitoring rides on the guard hooks: enable the guard for the chosen sites
+// with every protection off, so only the access log is collected.
+const submitEnable = async () => {
+    enabling.value = true;
+    try {
+        const cfg = status.value!.config;
+        if (!cfg.enable) {
+            await updateGuardGlobal({ ...cfg, enable: true });
+        }
+        for (const id of newIds.value) {
+            const res = await getGuardSite(id);
+            await updateGuardSite({
+                ...res.data,
+                websiteId: id,
+                enable: true,
+                mode: 'off',
+                ccEnable: false,
+                ipAllow: [],
+                ipDeny: [],
+                geoMode: 'none',
+                countries: [],
+            });
+        }
+        MsgSuccess(i18n.global.t('website.guard.monitorEnabled'));
+        enableOpen.value = false;
+        const target = sites.value.find((s) => s.websiteId === newIds.value[0]);
+        await loadStatus();
+        if (target && enabledSites.value.length === 1) {
+            site.value = target.alias;
+        }
+        search();
+    } finally {
+        enabling.value = false;
+    }
+};
+
+const onAutoRefresh = () => {
+    clearInterval(refreshTimer);
+    refreshTimer = undefined;
+    if (autoRefresh.value) {
+        refreshTimer = setInterval(search, 60 * 1000);
+    }
+};
+
 onMounted(async () => {
-    const [status] = await Promise.all([
-        getGuardStatus(),
+    await Promise.all([
+        loadStatus(),
         loadGuardCountries()
             .then((res) => {
                 const zh = globalStore.language.startsWith('zh');
@@ -266,8 +393,13 @@ onMounted(async () => {
             })
             .catch(() => {}),
     ]);
-    sites.value = (status.data.sites || []).filter((s) => s.enable);
-    search();
+    if (enabledSites.value.length > 0) {
+        search();
+    }
+});
+
+onUnmounted(() => {
+    clearInterval(refreshTimer);
 });
 </script>
 

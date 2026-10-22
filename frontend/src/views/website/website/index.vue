@@ -623,6 +623,13 @@ const buttons = [
         },
     },
     {
+        label: i18n.global.t('menu.websiteMonitor'),
+        permission: true,
+        click: (row: Website.Website) => {
+            routerToNameWithQuery('WebsiteMonitor', { site: row.alias });
+        },
+    },
+    {
         label: i18n.global.t('database.backupList'),
         permission: true,
         click: (row: Website.Website) => {
